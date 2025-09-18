@@ -1,4 +1,5 @@
 import { Code, Database, Server, Globe } from 'lucide-react';
+import profileImage from '@/assets/jewel-jose-profile.jpg';
 
 const About = () => {
   const skillCategories = [
@@ -20,7 +21,7 @@ const About = () => {
     {
       icon: <Globe className="h-8 w-8" />,
       title: "Tools & Others",
-      skills: ["Git", "AWS S3", "Render", "Postman", "Razorpay", "Next.js", "Supabase"]
+      skills: ["Git", "Razorpay", "Next.js", "Supabase", "AI Integration", "SEO"]
     }
   ];
 
@@ -55,24 +56,39 @@ const About = () => {
             </p>
           </div>
 
-          <div className="relative animate-fade-in delay-200">
-            <div className="glass-card p-8 rounded-2xl hover-scale transition-spring">
-              <h3 className="text-2xl font-bold mb-4 text-center gradient-text">
-                Current Role
-              </h3>
-              <div className="text-center">
-                <div className="text-xl font-semibold text-foreground mb-2">
-                  Software Developer Intern
-                </div>
-                <div className="text-primary font-medium mb-2">
-                  Stackmod Innovations Pvt Ltd
-                </div>
-                <div className="text-muted-foreground">
-                  Trivandrum, Kerala
-                </div>
-                <div className="text-sm text-muted-foreground mt-2">
-                  July 2024 - Present
-                </div>
+          {/* Profile Image */}
+          <div className="flex justify-center animate-fade-in delay-200">
+            <div className="relative">
+              <div className="w-80 h-80 rounded-2xl overflow-hidden glass-card">
+                <img 
+                  src={profileImage} 
+                  alt="Jewel Jose - MERN Stack Developer" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-primary/20 rounded-2xl"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Current Role Card */}
+        <div className="mb-16 flex justify-center">
+          <div className="glass-card p-8 rounded-2xl hover-scale transition-spring max-w-md">
+            <h3 className="text-2xl font-bold mb-4 text-center gradient-text">
+              Current Role
+            </h3>
+            <div className="text-center">
+              <div className="text-xl font-semibold text-foreground mb-2">
+                Software Developer Intern
+              </div>
+              <div className="text-primary font-medium mb-2">
+                Stackmod Innovations Pvt Ltd
+              </div>
+              <div className="text-muted-foreground">
+                Trivandrum, Kerala
+              </div>
+              <div className="text-sm text-muted-foreground mt-2">
+                July 2024 - Present
               </div>
             </div>
           </div>

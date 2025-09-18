@@ -68,7 +68,7 @@ const Hero = () => {
               <Mail size={24} />
             </a>
             <a 
-              href="https://github.com/jeweljose" 
+              href="https://github.com/JewelJose62" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-smooth hover-scale"
@@ -77,7 +77,7 @@ const Hero = () => {
               <Github size={24} />
             </a>
             <a 
-              href="https://linkedin.com/in/jeweljose" 
+              href="https://www.linkedin.com/in/jewel-jose-553587231/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-smooth hover-scale"

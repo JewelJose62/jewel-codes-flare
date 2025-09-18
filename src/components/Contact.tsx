@@ -27,12 +27,12 @@ const Contact = () => {
     {
       icon: <Github className="h-6 w-6" />,
       label: "GitHub",
-      href: "https://github.com/jeweljose"
+      href: "https://github.com/JewelJose62"
     },
     {
       icon: <Linkedin className="h-6 w-6" />,
       label: "LinkedIn", 
-      href: "https://linkedin.com/in/jeweljose"
+      href: "https://www.linkedin.com/in/jewel-jose-553587231/"
     },
     {
       icon: <Mail className="h-6 w-6" />,

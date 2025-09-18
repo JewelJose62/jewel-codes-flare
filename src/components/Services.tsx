@@ -1,4 +1,4 @@
-import { Code, Database, Cloud, Smartphone, Globe, Zap } from 'lucide-react';
+import { Code, Database, Smartphone, Globe, Zap } from 'lucide-react';
 
 const Services = () => {
   const services = [
@@ -13,12 +13,6 @@ const Services = () => {
       title: "API Development & Integration",
       description: "Custom RESTful API development, third-party API integrations, and database design with secure authentication and authorization systems.",
       features: ["RESTful APIs", "JWT Authentication", "Database Design", "Payment Gateway Integration"]
-    },
-    {
-      icon: <Cloud className="h-8 w-8" />,
-      title: "Cloud Deployment & DevOps",
-      description: "Professional deployment and hosting solutions using modern cloud platforms with CI/CD pipelines and performance optimization.",
-      features: ["AWS Deployment", "Vercel Hosting", "Domain Setup", "Performance Optimization"]
     },
     {
       icon: <Zap className="h-8 w-8" />,
