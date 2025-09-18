@@ -115,8 +115,10 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background: linear-gradient(to right, hsl(270 50% 70%), hsl(270 50% 80%), hsl(270 60% 90%));
+    @apply text-foreground;
     scroll-behavior: smooth;
+    min-height: 100vh;
   }
 }
 
