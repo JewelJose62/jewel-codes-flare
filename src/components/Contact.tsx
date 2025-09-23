@@ -1,7 +1,92 @@
-import { Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, Linkedin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import emailjs from '@emailjs/browser';
+import { useState } from 'react';
+import { toast } from '@/hooks/use-toast';
+
+// EmailJS Configuration
+const EMAILJS_SERVICE_ID = 'your_service_id'; // Replace with your EmailJS service ID
+const EMAILJS_TEMPLATE_ID = 'your_template_id'; // Replace with your EmailJS template ID
+const EMAILJS_AUTO_REPLY_TEMPLATE_ID = 'your_auto_reply_template_id'; // Replace with your auto-reply template ID
+const EMAILJS_PUBLIC_KEY = 'your_public_key'; // Replace with your EmailJS public key
+
+// Form validation schema
+const contactSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email address'),
+  subject: z.string().min(5, 'Subject must be at least 5 characters'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    
+    try {
+      // Initialize EmailJS
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+      
+      // Send email to you
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name: data.name,
+          from_email: data.email,
+          subject: data.subject,
+          message: data.message,
+          to_email: 'jeweljesta@gmail.com',
+        }
+      );
+      
+      // Send auto-reply to the sender
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_AUTO_REPLY_TEMPLATE_ID,
+        {
+          to_name: data.name,
+          to_email: data.email,
+          from_name: 'Jewel Jose',
+          from_email: 'jeweljesta@gmail.com',
+        }
+      );
+      
+      toast({
+        title: "Message sent successfully!",
+        description: "Thank you for reaching out. I'll get back to you soon!",
+      });
+      
+      reset();
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      toast({
+        title: "Failed to send message",
+        description: "Please try again or contact me directly via email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const contactInfo = [
     {
       icon: <Mail className="h-6 w-6" />,
@@ -120,56 +205,114 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Card */}
+          {/* Contact Form */}
           <div className="animate-fade-in delay-200">
             <div className="glass-card p-8 rounded-2xl">
               <h3 className="text-2xl font-bold mb-6 gradient-text text-center">
-                Ready to Work Together?
+                Send me a Message
               </h3>
               
-              <div className="space-y-6">
-                <div className="text-center">
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    I'm available for freelance projects, full-time opportunities, 
-                    or just a friendly chat about web development and technology.
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <Button
-                    size="lg"
-                    className="w-full bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground py-3 font-semibold transition-spring hover-scale shadow-glow-primary"
-                    asChild
-                  >
-                    <a href="mailto:jeweljesta@gmail.com">
-                      <Mail className="mr-2 h-5 w-5" />
-                      Send me an Email
-                    </a>
-                  </Button>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Name *</Label>
+                    <Input
+                      id="name"
+                      {...register('name')}
+                      placeholder="Your full name"
+                      className={errors.name ? 'border-red-500' : ''}
+                    />
+                    {errors.name && (
+                      <p className="text-sm text-red-500">{errors.name.message}</p>
+                    )}
+                  </div>
                   
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground py-3 font-semibold transition-spring hover-scale"
-                    asChild
-                  >
-                    <a href="tel:+917012946751">
-                      <Phone className="mr-2 h-5 w-5" />
-                      Call Me
-                    </a>
-                  </Button>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      {...register('email')}
+                      placeholder="your.email@example.com"
+                      className={errors.email ? 'border-red-500' : ''}
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-red-500">{errors.email.message}</p>
+                    )}
+                  </div>
                 </div>
-
-                <div className="pt-6 border-t border-border/20 text-center">
-                  <p className="text-sm text-muted-foreground">
+                
+                <div className="space-y-2">
+                  <Label htmlFor="subject">Subject *</Label>
+                  <Input
+                    id="subject"
+                    {...register('subject')}
+                    placeholder="What's this about?"
+                    className={errors.subject ? 'border-red-500' : ''}
+                  />
+                  {errors.subject && (
+                    <p className="text-sm text-red-500">{errors.subject.message}</p>
+                  )}
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="message">Message *</Label>
+                  <Textarea
+                    id="message"
+                    {...register('message')}
+                    placeholder="Tell me about your project or how I can help you..."
+                    rows={6}
+                    className={errors.message ? 'border-red-500' : ''}
+                  />
+                  {errors.message && (
+                    <p className="text-sm text-red-500">{errors.message.message}</p>
+                  )}
+                </div>
+                
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground py-3 font-semibold transition-spring hover-scale shadow-glow-primary"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-5 w-5" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
+                
+                <div className="text-center pt-4 border-t border-border/20">
+                  <p className="text-sm text-muted-foreground mb-2">
                     <strong>Currently Available</strong> for new projects and opportunities
                   </p>
-                  <div className="flex items-center justify-center mt-2">
+                  <div className="flex items-center justify-center mb-4">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
                     <span className="text-sm text-green-400 font-medium">Open to Work</span>
                   </div>
+                  
+                  <div className="flex justify-center space-x-4">
+                    <Button variant="outline" size="sm" asChild>
+                      <a href="mailto:jeweljesta@gmail.com">
+                        <Mail className="mr-2 h-4 w-4" />
+                        Email
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href="tel:+917012946751">
+                        <Phone className="mr-2 h-4 w-4" />
+                        Call
+                      </a>
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
